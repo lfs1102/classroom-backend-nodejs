@@ -1,0 +1,345 @@
+swagger: "2.0"
+info:
+  version: "0.0.1"
+  title: Hello World App
+# during dev, should point to your local machine
+host: localhost:10010
+# basePath prefixes all resource paths 
+basePath: /api/v1/
+# 
+schemes:
+  # tip: remove http to make production-grade
+  - http
+  - https
+# format of bodies a client can send (Content-Type)
+consumes:
+  - application/json
+# format of the responses to the client (Accepts)
+produces:
+  - application/json
+paths:
+
+
+  /classes:
+    x-swagger-router-controller: classes
+    get:
+      description: get all classes enrolled
+      operationId: listAll
+      parameters:
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /classes/{id}:
+    x-swagger-router-controller: classes
+    get:
+      description: get a specific class
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        description: class id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/assignments:
+    x-swagger-router-controller: classes
+    get:
+      description: get all assignments of a class
+      operationId: listAssignments
+      parameters:
+      - name: id
+        in: path
+        description: class id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    post:
+      description: create a new assignment
+      operationId: createAssignment
+      parameters:
+      - name: id
+        in: path
+        description: class id
+        required: true
+        type: string
+      - name: assignment_obj
+        in: body
+        description: assignment, deadline must be a vaild javascript date, '2015-11-10T23:59:59Z' for example
+        required: true
+        schema:
+            $ref: "#/definitions/CreateAssignmentRequestBody"
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/assignments/fork/{pid}:
+    x-swagger-router-controller: classes
+    post:
+      description: fork a assignment
+      operationId: forkAssignment
+      parameters:
+      - name: id
+        in: path
+        description: class id
+        required: true
+        type: string
+      - name: pid
+        in: path
+        description: the id of assignment to fork
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /classes/{id}/members:
+    x-swagger-router-controller: classes
+    get:
+      description: get all members of a class
+      operationId: listMembers
+      parameters:
+      - name: id
+        in: path
+        description: class id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /assignments:
+    x-swagger-router-controller: assignments
+    get:
+      description: get all assignments involved, ranked by days
+      operationId: listAll
+      parameters:
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /assignments/{id}:
+    x-swagger-router-controller: assignments
+    get:
+      description: get a specific assignment
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        description: assignment id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+    delete:
+      description: remove a specific assignment
+      operationId: remove
+      parameters:
+      - name: id
+        in: path
+        description: assignment id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /assignments/{id}/merge_requests:
+    x-swagger-router-controller: assignments
+    post:
+      description: create MR to submit assignment
+      operationId: submit
+      parameters:
+      - name: id
+        in: path
+        description: assignment id
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+  /users/{id}:
+    x-swagger-router-controller: users
+    get:
+      description: get a specific user
+      operationId: get
+      parameters:
+      - name: id
+        in: path
+        description: user id, user "me" get get current user
+        required: true
+        type: string
+      - name: token
+        in: header
+        description: token
+        type: string
+        required: true
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /session/login:
+    x-swagger-router-controller: session
+    get:
+      description: Login and set token
+      operationId: login
+      parameters:
+      - name: username
+        in: query
+        description: Username or Email
+        required: true
+        type: string
+      - name: password
+        in: query
+        description: Password of user
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /session/token_login:
+    x-swagger-router-controller: session
+    get:
+      description: Just set the token
+      operationId: token_login
+      parameters:
+      - name: token
+        in: query
+        description: token
+        required: true
+        type: string
+      responses:
+        "200":
+          description: Success
+        default:
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+# complex objects have schema definitions
+definitions:
+  HelloWorldResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  ErrorResponse:
+    required:
+      - message
+    properties:
+      message:
+        type: string
+  CreateAssignmentRequestBody:
+    required:
+      - name
+      - description
+      - deadline
+    properties:
+      name:
+        type: string
+      description:
+        type: string
+      deadline:
+        type: string
+      import_url:
+        type: string
+
