@@ -1,6 +1,3 @@
-/**
- * Created by lifengshuang on 20/12/2016.
- */
 "use strict";
 
 let apiwrap = require('./apibase').apiwrap;

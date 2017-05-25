@@ -1,6 +1,3 @@
-/**
- * Created by ZhongyiTong on 11/21/15.
- */
 "use strict";
 
 let assignmentsFilter = require('../filters/assignments');

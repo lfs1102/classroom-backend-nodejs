@@ -1,12 +1,9 @@
-/**
- * Created by lifengshuang on 20/12/2016.
- */
 "use strict";
 
 let commons = {};
 
 commons.server = {
-  url: 'http://gitlab.lifengshuang.website',
+  url: 'http://gitlab',
   admin_token: 'woiSFyyUezyJeyzq-y11',
   test_token: 'woiSFyyUezyJeyzq-y11'
 };
@@ -27,7 +24,7 @@ commons.authObj = {
 
 commons.unauthObj = {
   url: commons.server.url,
-  token: 'Fuck'
+  token: ''
 };
 
 module.exports = commons;
